@@ -16,11 +16,9 @@ struct ContentView: View {
     }
     var body: some View {
         NavigationSplitView {
-            List {
-                Text("Dfdf")
-            }
+            ScorePageLeftSideView()
         } detail: {
-            Text("Select an item")
+            ScorePageMainView()
         }
     }
 }
