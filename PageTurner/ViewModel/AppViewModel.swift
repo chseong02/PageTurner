@@ -16,4 +16,10 @@ class AppViewModel: ObservableObject {
         //TODO context 쿼리로 값 가져오기?
         self.isFirst = true
     }
+    
+    func setLastReadScore(uuid: UUID, page: Int) {
+        
+    }
+    
+    func
 }

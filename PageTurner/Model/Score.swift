@@ -14,13 +14,14 @@ final class Score {
     var name: String
     var composer: String
     var isFavorite: Bool
-    //TODO: 악보 경로 같은 정보 타입 나중에 확정
-    var path: String
-    init(name: String, composer: String, path: String) {
+    var url: URL
+    var lastReadpage: Int
+    init(name: String, composer: String, url: URL) {
         self.id = UUID()
         self.name = name
         self.composer = composer
-        self.path = path
+        self.url = url
         self.isFavorite = false
+        self.lastReadpage = 0
     }
 }

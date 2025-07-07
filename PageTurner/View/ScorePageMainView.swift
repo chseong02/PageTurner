@@ -35,11 +35,8 @@ struct ScorePageMainView: View {
 
             }
         }
-//        .fullScreenCover(isPresented: $isShownSheet) {
-//            NewScorePage(isPresented: $isShownSheet)
-//        }
         .sheet(isPresented: $isShownSheet) {
-            NewScorePage(isPresented: $isShownSheet)
+            NewScorePage(isPresented: $isShownSheet).interactiveDismissDisabled(true)
         }
     }
 }
