@@ -10,6 +10,7 @@ import SwiftData
 
 struct NewScorePage: View {
     @Environment(\.modelContext) var modelContext: ModelContext
+    @EnvironmentObject var appViewModel: ScoreViewModel
     @StateObject private var newScoreViewModel:NewScoreViewModel = NewScoreViewModel()
     @State private var isShownPicker: Bool = false
     @Binding var isPresented: Bool
@@ -47,6 +48,7 @@ struct NewScorePage: View {
                                 switch results {
                                 case . success(let fileurls):
                                     newScoreViewModel.setScorePath(urls: fileurls)
+                                    
                                 case .failure(let error):
                                     print(error)
                                 }
@@ -85,6 +87,11 @@ struct NewScorePage: View {
                     }
                     ToolbarItem (placement: .navigationBarTrailing) {
                         Button (action: {
+                            newScoreViewModel.complete()
+                            if(newScoreViewModel.uuid != nil){
+                                appViewModel.openScore(uuid: newScoreViewModel.uuid!)
+                            }
+        
                             isPresented.toggle()
                         }) {
                             Text("완료")

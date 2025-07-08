@@ -9,16 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @StateObject private var appViewModel: AppViewModel
+    @StateObject private var appViewModel: ScoreViewModel
     
     init(modelContext: ModelContext) {
-        _appViewModel = StateObject(wrappedValue: AppViewModel(modelContext: modelContext))
+        _appViewModel = StateObject(wrappedValue: ScoreViewModel(modelContext: modelContext))
     }
     var body: some View {
         NavigationSplitView {
             ScorePageLeftSideView()
         } detail: {
-            ScorePageMainView()
+            ScorePageMainView().environmentObject(appViewModel)
         }
     }
 }

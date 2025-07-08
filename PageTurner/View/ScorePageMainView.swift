@@ -10,19 +10,25 @@ import SwiftData
 
 struct ScorePageMainView: View {
     @State var isShownSheet: Bool = false
-    
+    @EnvironmentObject var appViewModel: ScoreViewModel
     var body: some View {
         VStack {
-            Text("아직 악보가 없네요!\n새 악보를 추가해주세요")
-                .font(.title)
-                .multilineTextAlignment(.center)
-            //Button("악보 추가").buttonStyle(style: .bordered)
-            Button{
-                isShownSheet = true
+            //if (appViewModel.score == nil) {
+            if (appViewModel.existNoPDf || !appViewModel.isOpened) {
+                Text("아직 악보가 없네요!\n새 악보를 추가해주세요")
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                //Button("악보 추가").buttonStyle(style: .bordered)
+                Button{
+                    isShownSheet = true
+                }
+                label: {
+                    Text("악보 추가").font(.headline)
+                }.buttonStyle(.borderedProminent)
             }
-            label: {
-                Text("악보 추가").font(.headline)
-            }.buttonStyle(.borderedProminent)
+            else {
+                PDFKitView(url: appViewModel.score!.url)
+            }
         }
         .navigationTitle(Text("Page Turner"))
         .toolbarTitleDisplayMode(.inline)
