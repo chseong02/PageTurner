@@ -14,11 +14,13 @@ struct PageTurnerApp: App {
         let schema = Schema([
             Item.self,
             Score.self,
+            LastReadScore.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        let modelConfiguration = ModelConfiguration(schema: schema,  allowsSave: true, )
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            container.mainContext.autosaveEnabled = true
+            return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }

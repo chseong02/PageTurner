@@ -13,17 +13,21 @@ class ScoreViewModel: ObservableObject {
     @Published var isOpened: Bool
     @Published var score: Score?
     @Published var page: Int
+    var pageCount: Int
+    
     init(modelContext: ModelContext) {
+        existNoPDf = true
+        isOpened = false
+        score = nil
+        page = 0
+        pageCount = 0
+        
         self.modelContext = modelContext
         //TODO context 쿼리로 값 가져오기?
         do {
             let descriptor = FetchDescriptor<LastReadScore>()
             let lastReadScores: [LastReadScore] = try modelContext.fetch(descriptor)
             if(lastReadScores.isEmpty){
-                existNoPDf = true
-                isOpened = false
-                score = nil
-                page = 0
             }
             else {
                 let lastReadScore: LastReadScore = lastReadScores[0]
@@ -35,17 +39,12 @@ class ScoreViewModel: ObservableObject {
                 if(foundedScore != nil){
                     score = foundedScore
                     page = foundedScore!.lastReadpage
+                    pageCount = foundedScore!.pageCount
                 }
                 else {
-                    page = 0
-                    score = nil
                 }
             }
         } catch {
-            existNoPDf = true
-            isOpened = false
-            score = nil
-            page = 0
         }
     }
     
@@ -62,9 +61,11 @@ class ScoreViewModel: ObservableObject {
                 page = score!.lastReadpage
                 existNoPDf = false
                 isOpened = true
+                pageCount = score!.pageCount
             }
             let descriptor2 = FetchDescriptor<LastReadScore>()
             let lastReadScores: [LastReadScore] = try modelContext.fetch(descriptor2)
+            print(lastReadScores)
             if (lastReadScores.isEmpty) {
                 let lastReadScore = LastReadScore(id: uuid)
                 modelContext.insert(lastReadScore)
@@ -75,6 +76,22 @@ class ScoreViewModel: ObservableObject {
         }
         catch {
             
+        }
+    }
+    
+    func nextPage() {
+        print(page)
+        print(pageCount)
+        if(pageCount>page) {
+            page+=1
+            score!.lastReadpage = page
+        }
+    }
+    
+    func previousPage() {
+        if(page>0) {
+            page-=1
+            score!.lastReadpage = page
         }
     }
 }

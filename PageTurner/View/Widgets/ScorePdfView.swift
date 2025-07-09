@@ -24,6 +24,7 @@ struct ScorePdfView: View {
 
 struct PDFKitView: UIViewRepresentable {
     let url: URL
+    @EnvironmentObject var scoreViewModel: ScoreViewModel
     func makeUIView(context: UIViewRepresentableContext<PDFKitView>) -> PDFView {
         let pdfView = PDFView()
         pdfView.document = PDFDocument(url: url)
@@ -31,11 +32,17 @@ struct PDFKitView: UIViewRepresentable {
         pdfView.maxScaleFactor = 10.0
         pdfView.minScaleFactor = 1.0
         pdfView.autoScales = true
+        pdfView.displayMode = .singlePage
         return pdfView
     }
     
     func updateUIView(_ uiView: PDFView, context: UIViewRepresentableContext<PDFKitView>) {
-        // TODO
+        
+        if let thePage = uiView.document?.page(at: scoreViewModel.page) {
+            context.animate(changes: {
+                uiView.go(to: thePage)
+            })
+        }
     }
 }
 

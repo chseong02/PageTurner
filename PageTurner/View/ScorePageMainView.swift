@@ -13,8 +13,8 @@ struct ScorePageMainView: View {
     @EnvironmentObject var appViewModel: ScoreViewModel
     var body: some View {
         VStack {
-            //if (appViewModel.score == nil) {
-            if (appViewModel.existNoPDf || !appViewModel.isOpened) {
+            if (appViewModel.score == nil) {
+            //if (appViewModel.existNoPDf || !appViewModel.isOpened) {
                 Text("아직 악보가 없네요!\n새 악보를 추가해주세요")
                     .font(.title)
                     .multilineTextAlignment(.center)
@@ -28,6 +28,18 @@ struct ScorePageMainView: View {
             }
             else {
                 PDFKitView(url: appViewModel.score!.url)
+                    .gesture(DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
+                        .onEnded { value in
+                            print(value.translation)
+                            switch(value.translation.width, value.translation.height) {
+                                case (...0, -50...50):  appViewModel.nextPage()
+                                case (0..., -50...50):  appViewModel.previousPage()
+                                case (-100...100, ...0):  print("up swipe")
+                                case (-100...100, 0...):  print("down swipe")
+                                default:  print("no clue")
+                            }
+                        }
+                    )
             }
         }
         .navigationTitle(Text("Page Turner"))

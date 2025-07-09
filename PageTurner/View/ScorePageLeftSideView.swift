@@ -9,13 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct ScorePageLeftSideView: View {
+    @StateObject private var scoreListViewModel: ScoreListViewModel = ScoreListViewModel()
+    @Environment(\.modelContext) var modelContext: ModelContext
+
     var body: some View {
         List {
             VStack {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundStyle(.gray)
-                  TextField("", text: .constant(""))
+                    TextField("", text: $scoreListViewModel.searchTerm)
                     .foregroundColor(Color.gray)
                 }
                 .padding(
@@ -34,17 +37,16 @@ struct ScorePageLeftSideView: View {
             Section (
                 header:Text("즐겨찾기"),
                 content: {
-                    SideBarScoreItemView()
-                    SideBarScoreItemView()
-                    SideBarScoreItemView()
-                    SideBarScoreItemView()
+                    ForEach(scoreListViewModel.favoriteScores, id: \.self) { score in
+                        SideBarScoreItemView(score: score)
+                    }
                 }
 
             )
             Section (header:Text("악보"),content: {
-                SideBarScoreItemView()
-                SideBarScoreItemView()
-                SideBarScoreItemView()
+                ForEach(scoreListViewModel.nonFavoriteScores, id: \.self) { score in
+                    SideBarScoreItemView(score: score)
+                }
             })
         }.listStyle(.insetGrouped)
         .navigationTitle(Text("악보"))
@@ -56,6 +58,9 @@ struct ScorePageLeftSideView: View {
                     Image(systemName: "plus")
                 }
             }
+        }.onAppear {
+            scoreListViewModel.initModelContext(modelContext: modelContext)
+            scoreListViewModel.getScores()
         }
     }
 }

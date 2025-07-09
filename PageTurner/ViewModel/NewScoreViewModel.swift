@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import SwiftData
+import PDFKit
 
 class NewScoreViewModel: ObservableObject {
     @Published var scoreName: String = ""
@@ -59,7 +60,9 @@ class NewScoreViewModel: ObservableObject {
     
     func complete() {
         if(scorePath != nil){
-            let newScore = Score(name: scoreName, composer: composerName, url: scorePath!)
+            let pdfDocument = PDFDocument(url: scorePath!) ?? PDFDocument()
+            let pageCount = pdfDocument.pageCount
+            let newScore = Score(name: scoreName, composer: composerName, url: scorePath!, pageCount: pageCount)
             context.insert(newScore)
             uuid = newScore.id
         }
