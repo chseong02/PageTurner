@@ -19,12 +19,22 @@ class ScoreListViewModel: ObservableObject {
     }
     var favoriteScores: [Score] {
         get {
-            scores.filter { $0.isFavorite }
+            if(searchTerm == ""){
+                return scores.filter { $0.isFavorite }
+            }
+            else {
+                return searchResults.filter { $0.isFavorite }
+            }
         }
     }
     var nonFavoriteScores: [Score] {
         get {
-            scores.filter { $0.isFavorite == false }
+            if(searchTerm == ""){
+                return scores.filter { $0.isFavorite == false }
+            }
+            else {
+                return searchResults.filter { $0.isFavorite == false }
+            }
         }
     }
     
@@ -48,5 +58,8 @@ class ScoreListViewModel: ObservableObject {
     }
     func changeSearchTerm(term: String) {
         searchTerm = term
+    }
+    func update() {
+        getScores()
     }
 }

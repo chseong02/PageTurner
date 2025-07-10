@@ -42,15 +42,18 @@ struct ScorePageMainView: View {
                     )
             }
         }
-        .navigationTitle(Text("Page Turner"))
+        .navigationTitle(Text(appViewModel.score != nil ? appViewModel.score!.name : "Page Turner"))
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem (placement: .navigationBarTrailing){
-                Button {
-                } label: {
-                    Image(systemName: "book.pages")
-                }
+            if(appViewModel.score != nil)
+            {
+                ToolbarItem (placement: .navigationBarTrailing){
+                    Button {
+                    } label: {
+                        Image(systemName: "book.pages")
+                    }
 
+                }
             }
         }
         .sheet(isPresented: $isShownSheet) {

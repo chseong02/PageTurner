@@ -91,7 +91,6 @@ struct NewScorePage: View {
                             if(newScoreViewModel.uuid != nil){
                                 appViewModel.openScore(uuid: newScoreViewModel.uuid!)
                             }
-        
                             isPresented.toggle()
                         }) {
                             Text("완료")

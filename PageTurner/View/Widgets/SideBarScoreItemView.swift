@@ -7,8 +7,11 @@
 
 import SwiftUI
 import PDFKit
+import SwiftData
 
 struct SideBarScoreItemView: View {
+    @Environment(\.modelContext) var modelContext: ModelContext
+    @EnvironmentObject var scoreListViewModel: ScoreListViewModel
     let score: Score
     var body: some View {
         HStack {
@@ -22,18 +25,27 @@ struct SideBarScoreItemView: View {
             }
             Spacer()
             SideBarScoreItemInternalImageView(url: score.url)
-            //            AsyncImage(url:URL(string:"https://mblogthumb-phinf.pstatic.net/MjAyMTEyMjBfMzMg/MDAxNjQwMDA1MTE1OTkx.wxi8mv4SkKGAuPi2diTJG7EKo5T5Ymh9uZIlo5ba_1Mg.7HEVdGNtagjnoF-ckm_PMXvCfh8ZqnAko0K38LrJ3Twg.PNG.somsomi1119/열정1악장.png?type=w800"))
-            //            {
-            //                phase in
-            //                switch phase {
-            //                case .empty: ProgressView().frame(width: 50, height: 120)
-            //                case .success(let image): image.resizable().scaledToFit().frame(height:120)
-            //                case .failure: Text("에러")
-            //                @unknown default:
-            //                    Text("몰라")
-            //                }
-            //            }
-            //        }.frame(height: 120)
+        }.swipeActions(edge: .leading, allowsFullSwipe: false) {
+            if(!score.isFavorite){
+                Button {
+                    score.isFavorite.toggle()
+                }
+                label: { Label("즐겨찾기", systemImage: "star.fill") } .tint(.yellow)
+            }
+            else {
+                Button {
+                    score.isFavorite.toggle()
+                }
+                label: { Label("즐겨찾기\n해제", systemImage: "star.slash.fill") } .tint(.orange)
+            }
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button {
+                modelContext.delete(score)
+                //TODO: 진짜 삭제하시겠습니까? 추가하면 좋을듯.
+                scoreListViewModel.update()
+            }
+            label: { Label("삭제", systemImage: "trash.fill") } .tint(.red)
         }
     }
 }
