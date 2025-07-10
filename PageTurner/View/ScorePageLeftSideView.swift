@@ -10,6 +10,7 @@ import SwiftData
 
 struct ScorePageLeftSideView: View {
     @StateObject private var scoreListViewModel: ScoreListViewModel = ScoreListViewModel()
+    @EnvironmentObject var scoreViewModel: ScoreViewModel
     @Environment(\.modelContext) var modelContext: ModelContext
     @State var isShownSheet: Bool = false
     var body: some View {
@@ -68,6 +69,10 @@ struct ScorePageLeftSideView: View {
         }.sheet(isPresented: $isShownSheet) {
             NewScorePage(isPresented: $isShownSheet).interactiveDismissDisabled(true)
         }.environmentObject(scoreListViewModel)
+            .onChange(of: scoreViewModel.score) {
+                score in
+                scoreListViewModel.getScores()
+            }
     }
 }
 

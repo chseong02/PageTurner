@@ -54,17 +54,6 @@ struct NewScorePage: View {
                                 }
                             }
                         )
-                        Button {
-                        } label: {
-                            HStack {
-                                Image(systemName: "camera").padding(.bottom, 2)
-                                Text("사진 찍어 업로드하기")
-                            }
-                            .padding(.horizontal, 8)
-                            .frame(height: 44)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.mint)
                     }
                     if newScoreViewModel.scorePath != nil {
                         PdfGridView(url: newScoreViewModel.scorePath!)

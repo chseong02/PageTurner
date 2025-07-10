@@ -11,6 +11,7 @@ import SwiftData
 
 struct SideBarScoreItemView: View {
     @Environment(\.modelContext) var modelContext: ModelContext
+    @EnvironmentObject var scoreViewModel: ScoreViewModel
     @EnvironmentObject var scoreListViewModel: ScoreListViewModel
     let score: Score
     var body: some View {
@@ -46,6 +47,12 @@ struct SideBarScoreItemView: View {
                 scoreListViewModel.update()
             }
             label: { Label("삭제", systemImage: "trash.fill") } .tint(.red)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.clear)
+        .contentShape(Rectangle()) 
+        .onTapGesture {
+            scoreViewModel.openScore(uuid: score.id)
         }
     }
 }

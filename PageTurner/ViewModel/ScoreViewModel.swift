@@ -94,4 +94,8 @@ class ScoreViewModel: ObservableObject {
             score!.lastReadpage = page
         }
     }
+    func goToPage(_ page: Int) {
+        self.page = page
+        score!.lastReadpage = page
+    }
 }

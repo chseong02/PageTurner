@@ -11,9 +11,6 @@ import PDFKit
 struct ScorePdfView: View {
     let pdfUrl: URL
     
-    init(pdfUrl: URL) {
-        self.pdfUrl = pdfUrl
-    }
     var body: some View {
         VStack {
             PDFKitView(url: pdfUrl)
